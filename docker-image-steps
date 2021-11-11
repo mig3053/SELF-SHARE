@@ -1,0 +1,21 @@
+Create the Dockerfile
+
+Define the desired container.
+Update the packages on the container.
+Install Nginx.
+Update the Nginx configuration.
+Create the location of the website files.
+Set the working directory to that of the website.
+Copy over website files, ensuring that Nginx is the owner.
+Expose port 80.
+Run Nginx at /tmp/nginx.pid; ensure Nginx is not set to run as a daemon.
+
+FROM alpine:3.13
+RUN apk upgrade
+RUN apk add nginx
+COPY files/default.conf /etc/nginx/conf.d/default.conf
+RUN mkdir -p /var/www/html
+WORKDIR /var/www/html
+COPY --chown=nginx:nginx /files/html/ .
+EXPOSE 80
+CMD [ "nginx", "-g", "pid /tmp/nginx.pid; daemon off;" ]
